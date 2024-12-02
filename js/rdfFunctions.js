@@ -443,12 +443,12 @@ async function generateThesaurus(idObject, topPosition) {
       for (let label in idObject[key]["prefLabel"].split("|")) {
         text = label.split("@")[0]
         lang = label.split("@")[1]
-        store.add(concept, prefLabel, $rdf.lit(label, undefined, lang));
+        store.add(concept, prefLabel, $rdf.lit(text, undefined, lang));
       }
       for (let label in idObject[key]["altLabel"].split("|")) {
         text = label.split("@")[0]
         lang = label.split("@")[1]
-        store.add(concept, altLabel, $rdf.lit(label, undefined, lang));
+        store.add(concept, altLabel, $rdf.lit(text, undefined, lang));
       }
     }
     // add idObject[key]["definition"] as rdf:langString german to concept
