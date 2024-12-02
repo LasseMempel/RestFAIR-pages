@@ -1,3 +1,17 @@
+// Funktion zum Selektieren des richtigen prefLabels für die Visualisierung
+function selectLabel(text) {
+  let prefLabels = text.split("|")
+  let displayLabel = prefLabels[0].split("@")[0]
+  if (prefLabels.length > 1) {
+    for (i of prefLabels) {
+      if (i.includes("@de")) {
+        displayLabel = i.split("@")[0]
+        }
+      }
+    }
+  return displayLabel
+}
+
 //TidyTree and ClusterTree
 function generateTidyTree(data, idObject, visualizationType, commentConceptObject) {
     const width = 2000; //928
@@ -69,7 +83,7 @@ function generateTidyTree(data, idObject, visualizationType, commentConceptObjec
         .attr("dy", "0.31em")
         .attr("x", d => d.children ? -6 : 6)
         .attr("text-anchor", d => d.children ? "end" : "start")
-        .text(d => idObject[d.data.id]["prefLabel"])
+        .text(d => selectLabel(idObject[d.data.id]["prefLabel"]))
         .attr("fill", d => d.data.id in commentConceptObject ? commentConceptObject[d.data.id] : "black")
         .attr("stroke", "white")
         .attr("paint-order", "stroke");
@@ -141,7 +155,7 @@ function generateTidyTree(data, idObject, visualizationType, commentConceptObjec
       .attr("stroke", "white")
       .attr("fill", "currentColor")
       .attr("fill", d => d.data.id in commentConceptObject ? commentConceptObject[d.data.id] : "black")
-      .text(d => idObject[d.data.id]["prefLabel"])
+      .text(d => selectLabel(idObject[d.data.id]["prefLabel"]))
       .on("click", (e, d) => openDetails(d.data.id, idObject));
 
   return svg.node();
@@ -209,7 +223,7 @@ function generateTidyTree(data, idObject, visualizationType, commentConceptObjec
       .attr("stroke", "white")
       .attr("fill", "currentColor")
       .attr("fill", d => d.data.id in commentConceptObject ? commentConceptObject[d.data.id] : "black")
-      .text(d => idObject[d.data.id]["prefLabel"])
+      .text(d => selectLabel(idObject[d.data.id]["prefLabel"]))
       .on("click", (e, d) => openDetails(d.data.id, idObject));
 
   return svg.node();
@@ -254,10 +268,10 @@ function generateTidyTree(data, idObject, visualizationType, commentConceptObjec
     .selectAll("path")
     .data(root.descendants().filter(d => d.depth))
     .join("path")
-      .attr("fill", d => { while (d.depth > 1) d = d.parent; return color(idObject[d.data.id]["prefLabel"]); })
+      .attr("fill", d => { while (d.depth > 1) d = d.parent; return color(selectLabel(idObject[d.data.id]["prefLabel"])); })
       .attr("d", arc)
     .append("title")
-      .text(d => `${d.ancestors().map(d => idObject[d.data.id]["prefLabel"]).reverse().join("/")}\n${format(d.value)}`);
+      .text(d => `${d.ancestors().map(d => selectLabel(idObject[d.data.id]["prefLabel"])).reverse().join("/")}\n${format(d.value)}`);
 
   // Add a label for each element.
   svg.append("g")
@@ -274,7 +288,7 @@ function generateTidyTree(data, idObject, visualizationType, commentConceptObjec
         return `rotate(${x - 90}) translate(${y},0) rotate(${x < 180 ? 0 : 180})`;
       })
       .attr("dy", "0.35em")
-      .text(d => idObject[d.data.id]["prefLabel"]);
+      .text(d => selectLabel(idObject[d.data.id]["prefLabel"]));
       //.attr("fill", d => d.data.id in commentConceptObject ? commentConceptObject[d.data.id] : "black");
       //.on("click", (e, d) => openDetails(d.data.id, idObject));
 
@@ -459,7 +473,7 @@ function generateForceDirectedTree(data, idObject, commentConceptObject) {
           .attr("dy", "0.31em")
           .attr("x", d => d._children ? -6 : 6)
           .attr("text-anchor", d => d._children ? "end" : "start")
-          .text(d => idObject[d.data.id]["prefLabel"])
+          .text(d => selectLabel(idObject[d.data.id]["prefLabel"]))
           .attr("stroke-linejoin", "round")
           .attr("stroke-width", 3)
           .attr("stroke", "white")
@@ -515,7 +529,7 @@ function generateForceDirectedTree(data, idObject, commentConceptObject) {
     root.descendants().forEach((d, i) => {
       d.id = i;
       d._children = d.children;
-      if (d.depth && idObject[d.data.id]["prefLabel"].length !== 7) d.children = null;
+      if (d.depth && selectLabel(idObject[d.data.id]["prefLabel"]).length !== 7) d.children = null;
     });
   
     update(null, root);
@@ -580,14 +594,14 @@ function generateForceDirectedTree(data, idObject, commentConceptObject) {
     node.append("text")
         .attr("dy", "0.32em")
         .attr("x", d => d.depth * nodeSize + 6)
-        .text(d => idObject[d.data.id]["prefLabel"])
+        .text(d => selectLabel(idObject[d.data.id]["prefLabel"]))
         // fill commented nodes red
         .attr("fill", d => d.data.id in commentConceptObject ? commentConceptObject[d.data.id] : "black");
 
     // append tooltip to node
   
     node.append("title")
-        .text(d => d.ancestors().reverse().map(d => idObject[d.data.id]["prefLabel"]).join("/"));
+        .text(d => d.ancestors().reverse().map(d => selectLabel(idObject[d.data.id]["prefLabel"])).join("/"));
   
     for (const {label, value, format, x} of columns) {
       svg.append("text")
@@ -650,7 +664,7 @@ function generateIcicle(data, idObject, commentConceptObject) {
         .attr("transform", d => `translate(${d.y0},${d.x0})`);
   
     cell.append("title")
-        .text(d => `${d.ancestors().map(d => idObject[d.data.id]["prefLabel"]).reverse().join("/")}\n${format(d.value)}`);
+        .text(d => `${d.ancestors().map(d => selectLabel(idObject[d.data.id]["prefLabel"])).reverse().join("/")}\n${format(d.value)}`);
   
     // Color the cell with respect to which child of root it belongs to. 
     cell.append("rect")
@@ -660,7 +674,7 @@ function generateIcicle(data, idObject, commentConceptObject) {
         .attr("fill", d => {
           if (!d.depth) return "#ccc";
           while (d.depth > 1) d = d.parent;
-          return color(idObject[d.data.id]["prefLabel"]);
+          return color(selectLabel(idObject[d.data.id]["prefLabel"]));
         });
   
     // Add labels and a title.
@@ -669,7 +683,7 @@ function generateIcicle(data, idObject, commentConceptObject) {
         .attr("y", 13);
   
     text.append("tspan")
-        .text(d => idObject[d.data.id]["prefLabel"]);
+        .text(d => selectLabel(idObject[d.data.id]["prefLabel"]));
   
     text.append("tspan")
         .attr("fill-opacity", 0.7)
