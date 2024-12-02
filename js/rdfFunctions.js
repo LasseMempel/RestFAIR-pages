@@ -10,7 +10,16 @@ async function openDetails(id, idObject) {
     // generate concept information for modal
     let body = document.getElementsByClassName("modal-body")
     let header = document.getElementById("header-head")
-    header.innerHTML = idObject[id]["prefLabel"];
+    let prefLabels = idObject[id]["prefLabel"].split("|")
+    let displayLabel = prefLabels[0].split("@")[0]
+    if (prefLabels.length > 1) {
+      for (i of prefLabels) {
+        if ("@de" in i) {
+          displayLabel = i.split("@")[0]
+          }
+        }
+      }
+    header.innerHTML = displayLabel;
     idObject[id]["identifier"] = id.toString();
 
     const details = ["identifier","description", "altLabel", "related", "source", "creator", "closeMatch", "relatedMatch", "seeAlso", "example"];
