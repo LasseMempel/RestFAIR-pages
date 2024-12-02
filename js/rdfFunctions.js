@@ -440,14 +440,14 @@ async function generateThesaurus(idObject, topPosition) {
       }
     }
     else {
-      for (let prefLabel in idObject[key]["prefLabel"].split("|")) {
-        label = prefLabel.split("@")[0]
-        lang = prefLabel.split("@")[1]
+      for (let label in idObject[key]["prefLabel"].split("|")) {
+        text = label.split("@")[0]
+        lang = label.split("@")[1]
         store.add(concept, prefLabel, $rdf.lit(label, undefined, lang));
       }
-      for (let altLabel in idObject[key]["altLabel"].split("|")) {
-        label = altLabel.split("@")[0]
-        lang = altLabel.split("@")[1]
+      for (let label in idObject[key]["altLabel"].split("|")) {
+        text = label.split("@")[0]
+        lang = label.split("@")[1]
         store.add(concept, altLabel, $rdf.lit(label, undefined, lang));
       }
     }
