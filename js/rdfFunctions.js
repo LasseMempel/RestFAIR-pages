@@ -14,7 +14,7 @@ async function openDetails(id, idObject) {
     let displayLabel = prefLabels[0].split("@")[0]
     if (prefLabels.length > 1) {
       for (i of prefLabels) {
-        if ("@de" in i) {
+        if (i.includes("@de")) {
           displayLabel = i.split("@")[0]
           }
         }
