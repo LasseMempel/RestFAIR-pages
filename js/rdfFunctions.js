@@ -414,6 +414,7 @@ async function generateThesaurus(idObject, topPosition) {
 
   // iterate over all concepts in idObject and add them and their properties to the store
   for (let key in idObject) {
+    console.log(key)
     let concept = $rdf.sym(conceptSchemeNamespace+"/concepts/" + key);
 
     store.add(concept, type, SK('Concept'));
@@ -441,13 +442,13 @@ async function generateThesaurus(idObject, topPosition) {
     }
     else {
       prefLabels = idObject[key]["prefLabel"].split("|");
-      for (let label in prefLabels) {
+      for (let label of prefLabels) {
         text = label.split("@")[0]
         lang = label.split("@")[1]
         store.add(concept, prefLabel, $rdf.lit(text, undefined, lang));
       }
       altLabels = idObject[key]["altLabel"].split("|");
-      for (let label in altLabels) {
+      for (let label of altLabels) {
         text = label.split("@")[0]
         lang = label.split("@")[1]
         store.add(concept, altLabel, $rdf.lit(text, undefined, lang));
