@@ -419,29 +419,40 @@ async function generateThesaurus(idObject, topPosition) {
 
     store.add(concept, inScheme, thesaurusConceptScheme);
 
-    // add idObject[key]["prefLabel"]) as rdf:langString german to concept
-    store.add(concept, prefLabel, $rdf.lit(idObject[key]["prefLabel"], undefined, "de"));
-
-    if (idObject[key]["translation"] != "") {
-      let translations = idObject[key]["translation"].split("|");
-      for (let i = 0; i < translations.length; i++) {
-        let translationValue = translations[i].split("@")[0];
-        let translationLang = translations[i].split("@")[1];
-        store.add(concept, prefLabel, $rdf.lit(translationValue, undefined, translationLang));
+    if ("translation" in idObject[key]) {
+      if (idObject[key]["translation"] != "") {
+        let translations = idObject[key]["translation"].split("|");
+        for (let i = 0; i < translations.length; i++) {
+          let translationValue = translations[i].split("@")[0];
+          let translationLang = translations[i].split("@")[1];
+          store.add(concept, prefLabel, $rdf.lit(translationValue, undefined, translationLang));
+        }
+      }
+      // add idObject[key]["prefLabel"]) as rdf:langString german to concept
+      store.add(concept, prefLabel, $rdf.lit(idObject[key]["prefLabel"], undefined, "de"));
+      if (idObject[key]["altLabel"] != "") {
+        let altLabels = idObject[key]["altLabel"].split("|");
+        for (let i = 0; i < altLabels.length; i++) {
+          // add altLabels as rdf:langString german to concept
+          store.add(concept, altLabel, $rdf.lit(altLabels[i], undefined, "de"));
+        }
       }
     }
-
+    else {
+      for (let prefLabel in idObject[key]["prefLabel"].split("|")) {
+        label = prefLabel.split("@")[0]
+        lang = prefLabel.split("@")[1]
+        store.add(concept, prefLabel, $rdf.lit(label, undefined, lang));
+      }
+      for (let altLabel in idObject[key]["altLabel"].split("|")) {
+        label = altLabel.split("@")[0]
+        lang = altLabel.split("@")[1]
+        store.add(concept, altLabel, $rdf.lit(label, undefined, lang));
+      }
+    }
     // add idObject[key]["definition"] as rdf:langString german to concept
     if (idObject[key]["description"] != "") {
       store.add(concept, definition, $rdf.lit(idObject[key]["description"], undefined, "de"));
-    }
-
-    if (idObject[key]["altLabel"] != "") {
-      let altLabels = idObject[key]["altLabel"].split("|");
-      for (let i = 0; i < altLabels.length; i++) {
-        // add altLabels as rdf:langString german to concept
-        store.add(concept, altLabel, $rdf.lit(altLabels[i], undefined, "de"));
-      }
     }
     if (idObject[key]["related"] != "") {
       let relatedConcepts = idObject[key]["related"].split("|");
