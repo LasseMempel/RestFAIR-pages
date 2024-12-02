@@ -420,7 +420,7 @@ async function generateThesaurus(idObject, topPosition) {
 
     store.add(concept, inScheme, thesaurusConceptScheme);
 
-    if ("translation" in idObject[key]) {
+    if (typeof(idObject[key]["translation"]) == "string") {
       if (idObject[key]["translation"] != "") {
         let translations = idObject[key]["translation"].split("|");
         for (let i = 0; i < translations.length; i++) {
