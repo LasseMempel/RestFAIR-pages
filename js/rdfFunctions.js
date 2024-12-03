@@ -447,52 +447,67 @@ async function generateThesaurus(idObject, topPosition) {
         lang = label.split("@")[1]
         store.add(concept, prefLabel, $rdf.lit(text, undefined, lang));
       }
-      altLabels = idObject[key]["altLabel"].split("|");
-      for (let label of altLabels) {
-        text = label.split("@")[0]
-        lang = label.split("@")[1]
-        store.add(concept, altLabel, $rdf.lit(text, undefined, lang));
+      if (typeof(idObject[key]["altLabel"]) == "string") {
+        altLabels = idObject[key]["altLabel"].split("|");
+        for (let label of altLabels) {
+          text = label.split("@")[0]
+          lang = label.split("@")[1]
+          store.add(concept, altLabel, $rdf.lit(text, undefined, lang));
+        }
       }
     }
     // add idObject[key]["definition"] as rdf:langString german to concept
-    if (idObject[key]["description"] != "") {
-      store.add(concept, definition, $rdf.lit(idObject[key]["description"], undefined, "de"));
-    }
-    if (idObject[key]["related"] != "") {
-      let relatedConcepts = idObject[key]["related"].split("|");
-      for (let i = 0; i < relatedConcepts.length; i++) {
-        store.add(concept, related, $rdf.sym(conceptSchemeNamespace+"/concepts/" + relatedConcepts[i]));
+    if (typeof(idObject[key]["description"]) == "string") {
+      if (idObject[key]["description"] != "") {
+        store.add(concept, definition, $rdf.lit(idObject[key]["description"], undefined, "de"));
       }
     }
-    if (idObject[key]["source"] != "") {
-      let sources = idObject[key]["source"].split("|");
-      for (let i = 0; i < sources.length; i++) {
-        store.add(concept, source, sources[i]);
+    if (typeof(idObject[key]["related"]) == "string") {
+      if (idObject[key]["related"] != "") {
+        let relatedConcepts = idObject[key]["related"].split("|");
+        for (let i = 0; i < relatedConcepts.length; i++) {
+          store.add(concept, related, $rdf.sym(conceptSchemeNamespace+"/concepts/" + relatedConcepts[i]));
+        }
       }
     }
-    if (idObject[key]["closeMatch"] != "") {
-      let closeMatches = idObject[key]["closeMatch"].split("|");
-      for (let i = 0; i < closeMatches.length; i++) {
-        store.add(concept, closeMatch, closeMatches[i]);
+    if (typeof(idObject[key]["source"]) == "string") {
+      if (idObject[key]["source"] != "") {
+        let sources = idObject[key]["source"].split("|");
+        for (let i = 0; i < sources.length; i++) {
+          store.add(concept, source, sources[i]);
+        }
       }
     }
-    if (idObject[key]["relatedMatch"] != "") {
-      let relatedMatches = idObject[key]["relatedMatch"].split("|");
-      for (let i = 0; i < relatedMatches.length; i++) {
-        store.add(concept, relatedMatch, relatedMatches[i]);
+    if (typeof(idObject[key]["closeMatch"]) == "string") {
+      if (idObject[key]["closeMatch"] != "") {
+        let closeMatches = idObject[key]["closeMatch"].split("|");
+        for (let i = 0; i < closeMatches.length; i++) {
+          store.add(concept, closeMatch, closeMatches[i]);
+        }
       }
     }
-    if (idObject[key]["seeAlso"] != "") {
-      let seeAlsos = idObject[key]["seeAlso"].split("|");
-      for (let i = 0; i < seeAlsos.length; i++) {
-        store.add(concept, seeAlso, seeAlsos[i]);
+    if (typeof(idObject[key]["relatedMatch"]) == "string") {
+      if (idObject[key]["relatedMatch"] != "") {
+        let relatedMatches = idObject[key]["relatedMatch"].split("|");
+        for (let i = 0; i < relatedMatches.length; i++) {
+          store.add(concept, relatedMatch, relatedMatches[i]);
+        }
       }
     }
-
-    if (idObject[key]["example"] != "") {
-      let examples = idObject[key]["example"].split("|");
-      for (let i = 0; i < examples.length; i++) {
-        store.add(concept, example, examples[i]);
+    if (typeof(idObject[key]["seeAlso"]) == "string") {
+      if (idObject[key]["seeAlso"] != "") {
+        let seeAlsos = idObject[key]["seeAlso"].split("|");
+        for (let i = 0; i < seeAlsos.length; i++) {
+          store.add(concept, seeAlso, seeAlsos[i]);
+        }
+      }
+    }
+    if (typeof(idObject[key]["example"]) == "string") {
+      if (idObject[key]["example"] != "") {
+        let examples = idObject[key]["example"].split("|");
+        for (let i = 0; i < examples.length; i++) {
+          store.add(concept, example, examples[i]);
+        }
       }
     }
 
