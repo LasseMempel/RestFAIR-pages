@@ -1,4 +1,5 @@
 async function openDetails(id, idObject) {
+    console.log(idObject)
     let modal = document.getElementById("myModal");
 
     // clean modal content from previous concept
@@ -22,7 +23,7 @@ async function openDetails(id, idObject) {
     header.innerHTML = displayLabel;
     idObject[id]["identifier"] = id.toString();
 
-    const details = ["identifier","description","prefLabel", "altLabel", "related", "source", "creator", "closeMatch", "relatedMatch", "seeAlso", "example"];
+    const details = ["identifier","description","prefLabel", "altLabel", "translation", "related", "source", "creator", "closeMatch", "relatedMatch", "seeAlso", "example"];
 
     // iterate over all detail contents and create a paragraph for each
     for (let i = 0; i < details.length; i++) {
